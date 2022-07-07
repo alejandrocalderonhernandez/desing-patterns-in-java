@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  potgresql:
+        image: postgres:latest
+        container_name: MyPostgreSQL
+        restart: on-failure
+        hostname: postgresql
+        volumes:
+          - ./sql/schema.sql:/docker-entrypoint-initdb.d/create_schema.sql
+          - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
+        environment:
+            POSTGRES_DB: products
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: admin
+        ports:
+            - "5432:5432"
+
+  mariadb:
+    image: mariadb:latest
+    container_name: MymariaDB
+    hostname: mariadb
+    environment:
+      MYSQL_DATABASE: products
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    restart: on-failure
+    volumes:
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/create_schema.sql
+      - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
+    ports: 
+      - "3306:3306"
